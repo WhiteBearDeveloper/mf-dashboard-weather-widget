@@ -44,11 +44,9 @@ const WeatherContent = ({ date }: DashboardWidgetProps) => {
 
   return (
     <section className={styles.content}>
-      {isPending ? (
-        "Загружаем данные..."
-      ) : isError ? (
-        <>Произошла ошибка, попробуйте, позже</>
-      ) : (
+      {isPending && "Загружаем данные..."}
+      {isError && "Произошла ошибка, попробуйте, позже"}
+      {!isPending && !isError && (
         <>
           <h2>Прогноз погоды</h2>
           <p>Выбранная дата: {date}</p>
