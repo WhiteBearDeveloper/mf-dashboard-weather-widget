@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import type { DashboardWidgetProps } from "@whitebeardeveloper/contracts";
 import styles from "./WeatherWidget.module.scss";
 import {
@@ -7,18 +7,15 @@ import {
   useQuery,
 } from "@tanstack/react-query";
 import axios from "axios";
+import type { WttrResponse } from "./types/weather";
 
 const queryClient = new QueryClient();
 
-const getWeather = async (date: string) => {
-  const response = await axios.get("https://api.open-meteo.com/v1/forecast", {
+const getWeather = async (): Promise<WttrResponse> => {
+  const response = await axios.get<WttrResponse>("https://wttr.in/Barnaul", {
     params: {
-      latitude: 53.35,
-      longitude: 83.76,
-      daily: "weather_code,temperature_2m_max,temperature_2m_min",
-      start_date: date,
-      end_date: date,
-      timezone: "Asia/Barnaul",
+      format: "j1",
+      lang: "ru",
     },
   });
 
@@ -34,12 +31,18 @@ const WeatherWidget = (props: DashboardWidgetProps) => {
 };
 
 const WeatherContent = ({ date }: DashboardWidgetProps) => {
-  const queryKey = ["weather", date] as const;
+  const selectData = useCallback(
+    (data: WttrResponse) => data.weather.filter(day => day.date === date)[0],
+    [date],
+  );
+
+  const queryKey = ["weather"] as const;
 
   const { isPending, isError, data } = useQuery({
     queryKey,
-    queryFn: () => getWeather(date),
+    queryFn: () => getWeather(),
     staleTime: 1000 * 60,
+    select: selectData,
   });
 
   return (
@@ -51,8 +54,7 @@ const WeatherContent = ({ date }: DashboardWidgetProps) => {
           <h2>Прогноз погоды</h2>
           <p>Выбранная дата: {date}</p>
           <p>
-            {data.daily.temperature_2m_min} °C - {data.daily.temperature_2m_max}{" "}
-            °C
+            {data.mintempC} °C - {data.maxtempC} °C
           </p>
         </>
       )}
