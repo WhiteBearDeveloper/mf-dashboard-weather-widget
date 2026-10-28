@@ -24,8 +24,16 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: "ts-loader",
-        exclude: /node_modules/,
+        use: {
+          loader: "ts-loader",
+          options: {
+            allowTsInNodeModules: true,
+          },
+        },
+        include: [
+          path.resolve(__dirname, "src"),
+          path.resolve(__dirname, "node_modules/@whitebeardeveloper/ui/src"),
+        ],
       },
       {
         test: /\.s[ac]ss$/i,
