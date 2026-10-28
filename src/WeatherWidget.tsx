@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import { format, parseISO } from "date-fns";
 import type { DashboardWidgetProps } from "@whitebeardeveloper/contracts";
 import styles from "./WeatherWidget.module.scss";
 import {
@@ -42,6 +43,8 @@ const WeatherWidget = (props: DashboardWidgetProps) => {
 const WeatherContent = ({ date }: DashboardWidgetProps) => {
   const location = useWeatherLocationStore(state => state.location);
   const updateLocation = useWeatherLocationStore(state => state.updateLocation);
+
+  const formattedDate = format(parseISO(date), "dd.MM.yyyy");
 
   const selectData = useCallback(
     (data: WttrResponse) => data.weather.filter(day => day.date === date)[0],
@@ -96,7 +99,7 @@ const WeatherContent = ({ date }: DashboardWidgetProps) => {
       {!!data ? (
         <>
           <h2>Прогноз погоды {location.label}</h2>
-          <p>Выбранная дата: {date}</p>
+          <p>Выбранная дата: {formattedDate}</p>
           <p>
             {data.mintempC} °C - {data.maxtempC} °C
           </p>
