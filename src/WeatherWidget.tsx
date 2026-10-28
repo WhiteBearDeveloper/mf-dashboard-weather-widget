@@ -13,6 +13,7 @@ import {
   City,
   useWeatherLocationStore,
 } from "./store/weatherLocationStore";
+import { SelectField } from "@whitebeardeveloper/ui";
 
 const queryClient = new QueryClient();
 
@@ -64,8 +65,8 @@ const WeatherContent = ({ date }: DashboardWidgetProps) => {
     select: selectData,
   });
 
-  const onCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const city = cities.filter(item => item.value === e.target.value)[0];
+  const onCityChange = (value: string) => {
+    const city = cities.filter(item => item.value === value)[0];
     updateLocation(city);
   };
 
@@ -75,13 +76,12 @@ const WeatherContent = ({ date }: DashboardWidgetProps) => {
 
   return (
     <section className={styles.content}>
-      <select onChange={onCityChange} defaultValue={location.value}>
-        {cities.map(city => (
-          <option value={city.value} key={city.value}>
-            {city.name}
-          </option>
-        ))}
-      </select>
+      <SelectField
+        label="Выберите город"
+        onChange={onCityChange}
+        options={cities}
+        selectedValue={location.value}
+      />
       {isPending && "Загружаем данные..."}
       {isRefetching && "Обновляем данные..."}
       {!isRefetching &&
@@ -95,7 +95,7 @@ const WeatherContent = ({ date }: DashboardWidgetProps) => {
       )}
       {!!data ? (
         <>
-          <h2>Прогноз погоды {location.name}</h2>
+          <h2>Прогноз погоды {location.label}</h2>
           <p>Выбранная дата: {date}</p>
           <p>
             {data.mintempC} °C - {data.maxtempC} °C

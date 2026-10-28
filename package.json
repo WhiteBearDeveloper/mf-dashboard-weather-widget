@@ -22,6 +22,7 @@
   "homepage": "https://github.com/WhiteBearDeveloper/mf-weather-widget#readme",
   "dependencies": {
     "@tanstack/react-query": "^5.104.5",
+    "@whitebeardeveloper/ui": "^0.3.0",
     "axios": "^1.20.0",
     "date-fns": "^4.4.0",
     "react": "^19.3.0",
