@@ -1,1 +1,11 @@
 @use "@whitebeardeveloper/ui/reset";
+@use "@whitebeardeveloper/ui/fonts";
+
+body {
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
