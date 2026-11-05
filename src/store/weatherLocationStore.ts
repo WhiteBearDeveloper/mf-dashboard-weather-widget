@@ -1,8 +1,10 @@
-import { SelectFieldOption } from "@whitebeardeveloper/ui";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export type City = SelectFieldOption;
+export type City = {
+  value: string;
+  label: string;
+};
 
 type State = {
   location: City;
@@ -12,7 +14,7 @@ type Action = {
   updateLocation: (location: City) => void;
 };
 
-export const cities: SelectFieldOption[] = [
+export const cities: City[] = [
   {
     value: "Barnaul",
     label: "Барнаул",
